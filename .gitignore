@@ -1,0 +1,17 @@
+*.pyc
+*.pyo
+*.db
+.DS_Store
+.coverage
+local_settings.py
+/media
+TODO.txt
+env/
+
+# ignore static folder located at root level
+/static/
+
+# ignore all files in migrations folders except __init__.py
+migrations/**
+
+media/**
