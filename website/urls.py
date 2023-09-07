@@ -26,7 +26,7 @@ urlpatterns = [
 
 
 # if DEBUG is False
-if not settings.DEBUG:
-    urlpatterns += [
-        re_path(r"^media/(?P<path>.*)", get_media_path, name="get-media-path"),
-    ]
+# if not settings.DEBUG:
+urlpatterns += [
+    re_path(r"^media/(?P<path>.*)", get_media_path, name="get-media-path"),
+]

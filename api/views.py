@@ -7,6 +7,7 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.http import FileResponse
 from rest_framework.decorators import api_view, permission_classes
+from .helpers import zipped_images, is_request_for_images
 
 
 @api_view(["GET"])
@@ -21,26 +22,22 @@ def get_media_path(request, path):
     return: A FileResponse object that contains the file specified in the path parameter
     """
 
+    # print(f"query_params: {request.query_params}")
+    # print(f"page: {type(request.query_params.get('page'))}")
+    # print(f"limit: {type(request.query_params.get('limit'))}")
+
     if not os.path.exists(f"{settings.MEDIA_ROOT}/{path}"):
         return Response("No such file exists.", status=404)
 
-    path_segments = path.split('/')
+    [is_return_images, directory] = is_request_for_images(path)
 
-    # extract directory and filename parts from path
-    filename = path_segments[-1] if len(path_segments) > 0 else ""
-    directory = '/'.join(path_segments[:-1]) if len(path_segments) > 1 else ""
-
-    if (filename != "") & ("." not in filename):
-        # if path has not trailing slash, and path is directory
-        directory = f"{directory}/{filename}/" if directory != "" else f"{filename}/"
-        filename = ""
-
-    if filename == "":
+    if is_return_images:
         # return array of filenames
         files_path = unquote(os.path.join(
             settings.MEDIA_ROOT, directory)).encode("utf-8")
         filenames = os.listdir(files_path)
-        return Response(filenames, status=200)
+        return zipped_images(path, filenames)
+        # return Response(filenames, status=200)
 
     # Guess the MIME type of a file. Like pdf/docx/xlsx/png/jpeg
     mimetype, encoding = mimetypes.guess_type(path, strict=True)
