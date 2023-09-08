@@ -27,13 +27,32 @@ def unquote_path(path):
     return unquoted_path
 
 
-def is_request_for_images(path):
+def is_request_for_image_paths(path):
     filename, directory = extract_filename_directory(path)
 
     if filename == "":
         return [True, directory]
 
     return [False, directory]
+
+
+def get_filename_list(path, request):
+    filenames = os.listdir(path)
+    total_files = len(filenames)
+    if total_files == 0:
+        return []
+
+    params = request.query_params
+    if (('page' in params) & ('limit' in params)):
+        page = int(params.get('page'))
+        limit = int(params.get('limit'))
+
+        start_index = (page - 1) * limit if page > 0 else 0
+        end_index = page * limit if page * limit <= total_files else total_files
+
+        return filenames[start_index:end_index], total_files
+
+    return filenames, total_files
 
 
 def zipped_images(path, filenames):
