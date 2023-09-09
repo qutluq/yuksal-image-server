@@ -1,3 +1,4 @@
+import json
 from rest_framework.response import Response
 
 import mimetypes
@@ -33,7 +34,7 @@ def get_media_path(request, path):
         files_path = unquote(os.path.join(
             settings.MEDIA_ROOT, directory)).encode("utf-8")
         filenames, total_files = get_filename_list(files_path, request)
-        return Response({"filenames": filenames, "total": total_files}, status=200)
+        return Response(json.dumps({"filenames": filenames, "total": total_files}), status=200)
 
     # Guess the MIME type of a file. Like pdf/docx/xlsx/png/jpeg
     mimetype, encoding = mimetypes.guess_type(path, strict=True)
