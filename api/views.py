@@ -11,7 +11,6 @@ from .helpers import get_filename_list, is_request_for_image_paths
 
 
 @api_view(["GET"])
-@permission_classes([])
 def get_media_path(request, path):
     """
     Returns media file or filenames.
