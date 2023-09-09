@@ -7,27 +7,29 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.http import FileResponse
 from rest_framework.decorators import api_view, permission_classes
-from .helpers import get_filename_list, zipped_images, is_request_for_image_paths
+from .helpers import get_filename_list, is_request_for_image_paths
 
 
 @api_view(["GET"])
 @permission_classes([])
 def get_media_path(request, path):
     """
-    The get_media_path function is a helper function that takes in the request and
-    path of a file. It then checks if the file exists, and returns an error message if
-    it does not exist. If it does exist, it will return an HttpResponse with the
-    correct headers to serve up the media.
-    @param path: Determine the path of the file to be served
-    return: A FileResponse object that contains the file specified in the path parameter
+    Returns media file or filenames.
+
+    Parameters:
+        path (str): path that may or may not include filename, 
+
+    Returns:
+        media(blob): if path includes filename.
+        filenames(str[]): if path does not include filename. 
     """
 
     if not os.path.exists(f"{settings.MEDIA_ROOT}/{path}"):
         return Response("No such file exists.", status=404)
 
-    [is_return_images, directory] = is_request_for_image_paths(path)
+    [is_return_filenames, directory] = is_request_for_image_paths(path)
 
-    if is_return_images:
+    if is_return_filenames:
         # return array of filenames
         files_path = unquote(os.path.join(
             settings.MEDIA_ROOT, directory)).encode("utf-8")
