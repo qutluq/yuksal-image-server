@@ -38,12 +38,15 @@ def is_request_for_image_paths(path):
 
 def get_filename_list(path, request):
     filenames = os.listdir(path)
+    # decode filenames, so that filenames are turned from bytes to strings
+    filenames = [filename.decode('utf-8') for filename in filenames]
     total_files = len(filenames)
     if total_files == 0:
         return []
 
     params = request.query_params
     if (('page' in params) & ('limit' in params)):
+        # if page and limit query params are specified, return paginated list
         page = int(params.get('page'))
         limit = int(params.get('limit'))
 
