@@ -71,7 +71,7 @@ def zipped_images(path, filenames):
 
     # Add each file to the ZIP archive
     for filename in filenames:
-        filepath = os.path.join(settings.MEDIA_ROOT,
+        filepath = os.path.join("media",
                                 unquoted_path, unquote_path(filename))
 
         zipf.write(filepath)

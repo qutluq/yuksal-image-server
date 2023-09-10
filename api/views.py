@@ -28,7 +28,7 @@ def get_media_path(request, path):
     """
 
     main_file_path = unquote(os.path.join(
-        settings.MEDIA_ROOT, path)).encode("utf-8")
+        "media", path)).encode("utf-8")
 
     if not os.path.exists(main_file_path):
         # main file or directory does not exist
@@ -39,7 +39,7 @@ def get_media_path(request, path):
     if is_return_filenames:
         # return array of filenames
         files_path = unquote(os.path.join(
-            settings.MEDIA_ROOT, directory)).encode("utf-8")
+            "media", directory)).encode("utf-8")
         filenames, total_files = get_filename_list(files_path, request)
         return Response(json.dumps({"filenames": filenames, "total": total_files}), status=200)
 
@@ -53,7 +53,7 @@ def get_media_path(request, path):
     # sequences are replaced by a placeholder character.
     # Example: unquote('abc%20def') -> 'abc def'.
     file_path = unquote(os.path.join(
-        settings.MEDIA_ROOT, size, path)).encode("utf-8")
+        "media", size, path)).encode("utf-8")
 
     valid_sizes = ['sm', 'md']
     if (not os.path.exists(file_path)) & (size in valid_sizes) & mimetype.startswith('image/'):
