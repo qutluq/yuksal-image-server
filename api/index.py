@@ -6,7 +6,7 @@ import os
 from urllib.parse import unquote
 
 from django.conf import settings
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from rest_framework.decorators import api_view
 
 from utils.index import ThumbnailMd, ThumbnailSm
@@ -74,3 +74,29 @@ def get_media(request, path):
         file_path = main_file_path
 
     return FileResponse(open(file_path, "rb"), content_type=mimetype)
+
+
+def post_media(request, path):
+    """
+    Creates media file
+
+    Parameters:
+        path (str): path including filename
+        body (FormData), it must include file
+
+    Returns:
+        response object
+    """
+    if request.method != 'POST':
+        return JsonResponse({'message': f'Invalid request method: {request.method}'}, status=400)
+
+    media_file = request.FILES.get('file', None)
+    if media_file is None:
+        return JsonResponse({'message': 'Invalid request, file attachment not found'}, status=400)
+
+    file_path = unquote(os.path.join("media", path)).encode("utf-8")
+
+    with open(file_path, "wb") as file:
+        file.write(media_file.read())
+
+    return JsonResponse({'message': 'File uploaded successfully'}, status=201)
