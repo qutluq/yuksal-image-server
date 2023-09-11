@@ -14,7 +14,7 @@ from .helpers import get_filename_list, is_request_for_image_paths
 
 
 @api_view(["GET"])
-def get_media_path(request, path):
+def request_media(request, path):
     """
     Returns media file or filenames.
 
@@ -26,6 +26,8 @@ def get_media_path(request, path):
         media(blob): if path includes filename.
         filenames(str[]): if path does not include filename. 
     """
+
+    print(f'METHOD: {request.method}')
 
     main_file_path = unquote(os.path.join(
         "media", path)).encode("utf-8")

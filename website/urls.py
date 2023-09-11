@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from api.views import get_media_path
+from api.views import request_media
 
 from django.conf import settings
 
@@ -28,5 +28,5 @@ urlpatterns = [
 # if DEBUG is False
 # if not settings.DEBUG:
 urlpatterns += [
-    re_path(r"^media/(?P<path>.*)", get_media_path, name="get-media-path"),
+    re_path(r"^media/(?P<path>.*)", request_media, name="request-media"),
 ]
