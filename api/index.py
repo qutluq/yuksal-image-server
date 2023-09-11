@@ -99,4 +99,4 @@ def post_media(request, path):
     with open(file_path, "wb") as file:
         file.write(media_file.read())
 
-    return JsonResponse({'message': 'File uploaded successfully'}, status=201)
+    return JsonResponse({'message': 'File uploaded successfully', 'path': path}, status=201)
