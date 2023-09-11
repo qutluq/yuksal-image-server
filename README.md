@@ -19,9 +19,3 @@ python3 manage.py runserver
 ```
 
 There are no pages to display on [http://localhost:8000](http://localhost:8000), only REST API endpoints can be served, for details refer to docstrings.
-
-## Environment variables
-
-SECRET_KEY = "django-secure-key"
-
-NEVERCACHE_KEY = "never-cache-key"
