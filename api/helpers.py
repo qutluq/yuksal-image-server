@@ -80,3 +80,20 @@ def zipped_images(path, filenames):
     zipf.close()
 
     return response
+
+
+def remove_thumbnails(path):
+    file_path = unquote(os.path.join("media", "md", path)).encode("utf-8")
+    print(f"file_path: {file_path}")
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+        except OSError as e:
+            print(f"Error: {e}")
+
+    file_path = unquote(os.path.join("media", "sm", path)).encode("utf-8")
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+        except OSError as e:
+            print(f"Error: {e}")

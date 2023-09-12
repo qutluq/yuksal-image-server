@@ -10,7 +10,7 @@ from django.http import FileResponse, JsonResponse
 from rest_framework.decorators import api_view
 
 from utils.index import ThumbnailMd, ThumbnailSm
-from .helpers import get_filename_list, is_request_for_image_paths
+from .helpers import get_filename_list, is_request_for_image_paths, remove_thumbnails
 
 
 def get_media(request, path):
@@ -95,6 +95,8 @@ def post_media(request, path):
         return JsonResponse({'message': 'Invalid request, file attachment not found'}, status=400)
 
     file_path = unquote(os.path.join("media", path)).encode("utf-8")
+    if os.path.exists(file_path):
+        remove_thumbnails(path)
 
     with open(file_path, "wb") as file:
         file.write(media_file.read())
