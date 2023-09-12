@@ -78,7 +78,7 @@ def get_media(request, path):
 
 def post_media(request, path):
     """
-    Creates media file
+    Create media file
 
     Parameters:
         path (str): path including filename
@@ -102,3 +102,33 @@ def post_media(request, path):
         file.write(media_file.read())
 
     return JsonResponse({'message': 'File uploaded successfully', 'path': path}, status=201)
+
+
+def delete_media(request, path):
+    """
+    Delete media file
+
+    Parameters:
+        path (str): path including filename
+
+    Returns:
+        response object
+    """
+    if request.method != 'DELETE':
+        print(f'Invalid request method: {request.method}')
+        return Response(None, status=405)
+
+    file_path = unquote(os.path.join("media", path)).encode("utf-8")
+    if not os.path.exists(file_path):
+        print(f'File not found: {file_path}')
+        return Response(None, status=404)
+
+    remove_thumbnails(path)
+
+    try:
+        os.remove(file_path)
+    except OSError as e:
+        print(f"File delete operation failed, file: {path} \n error: {e}")
+        return Response(None, status=500)
+
+    return Response(None, status=204)
